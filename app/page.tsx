@@ -1,101 +1,81 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
+import LoadingScreen from '../components/LoadingScreen'
+import Terminal from '../components/Terminal'
+
+const welcomeText = `Welcome to the Reality Algorithm Generator
+
+You are about to step into a space where the rules of existence bend, shatter, and reform at your command. In this realm, the boundaries between what is real and what is possible blur, allowing you to manipulate the very fabric of reality itself. The limitations of time, space, and even the laws of physics are but a canvas for your imagination.
+
+Here, every choice you make has the potential to reshape the universe around you. Want to rewrite the laws of gravity? Test the limits of space-time? Or perhaps create entirely new worlds from scratch? The tools are at your fingertips.`
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [currentStage, setCurrentStage] = useState<'welcome' | 'loading' | 'terminal'>('welcome')
+  const [displayedText, setDisplayedText] = useState('')
+  const [showEnterButton, setShowEnterButton] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    let index = 0
+    const timer = setInterval(() => {
+      setDisplayedText(welcomeText.slice(0, index))
+      index++
+      if (index > welcomeText.length) {
+        clearInterval(timer)
+        setShowEnterButton(true)
+      }
+    }, 50)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <div className="h-screen w-screen bg-black text-green-500 font-mono overflow-hidden">
+      <AnimatePresence>
+        {currentStage === 'welcome' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="h-full w-full flex flex-col items-center justify-center p-8"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <motion.div
+              className="text-center mb-8 max-w-3xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              {displayedText.split('\n').map((line, index) => (
+                <p key={index} className="mb-4">{line}</p>
+              ))}
+            </motion.div>
+            {showEnterButton && (
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-green-500 text-black px-6 py-3 rounded text-lg font-semibold hover:bg-green-400 transition-colors"
+                onClick={() => setCurrentStage('loading')}
+              >
+                Enter
+              </motion.button>
+            )}
+            <div className="absolute bottom-8 flex gap-8">
+              <Link href="https://t.me/example" className="text-green-500 hover:text-green-400 font-bold">TELEGRAM</Link>
+              <Link href="https://twitter.com/example" className="text-green-500 hover:text-green-400 font-bold">TWITTER</Link>
+              <Link href="https://dexscreener.com/example" className="text-green-500 hover:text-green-400 font-bold">DEXSCREENER</Link>
+            </div>
+          </motion.div>
+        )}
+        {currentStage === 'loading' && (
+          <LoadingScreen onComplete={() => setCurrentStage('terminal')} />
+        )}
+        {currentStage === 'terminal' && (
+          <Terminal />
+        )}
+      </AnimatePresence>
     </div>
-  );
+  )
 }
