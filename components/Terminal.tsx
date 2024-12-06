@@ -37,6 +37,7 @@ export default function Terminal() {
   const [seqStatus, setSeqStatus] = useState("ANALYZING")
   const videoRef = useRef<HTMLVideoElement>(null)
   const messageEndRef = useRef<HTMLDivElement>(null)
+  const logsEndRef = useRef<HTMLDivElement>(null)
   const seqAnimation = useAnimation()
 
   const welcomeMessages = [
@@ -46,13 +47,13 @@ export default function Terminal() {
     "> Connecting to Multiversal Streams...",
     "> Access Granted: User ID [Undefined].",
     "> Welcome to the Brain Terminal.",
-    ">>> Playing with Reality Since 2024.",
+    ">>> Playing with Reality Since 2021.",
     "",
     "> This system operates on the edge of existence, where thoughts become code, and code becomes reality.",
     "> Here, imagination fuels creation. You are the architect, and this terminal is your canvas.",
     "",
     "[NOTE]: All actions will be logged in the System Status Panel.",
-    "[INFO]: Type help to explore commands or begin to start generating reality.",
+    "[INFO]: Type a command to start generating reality.",
     "",
     "> Awaiting your command...",
   ]
@@ -93,10 +94,11 @@ export default function Terminal() {
     return () => clearInterval(typingInterval)
   }, [currentLine, currentChar])
 
-  // Auto-scroll effect
+  // Auto-scroll effect for both chat and logs
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, welcomeText])
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, welcomeText, logs])
 
   const addLog = (log: string) => {
     setLogs(prevLogs => {
@@ -239,6 +241,7 @@ export default function Terminal() {
                   {log}
                 </div>
               ))}
+              <div ref={logsEndRef} />
             </div>
           </div>
         </div>
