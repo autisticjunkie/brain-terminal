@@ -39,7 +39,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="h-full w-full flex flex-col items-center justify-center p-8"
+            className="h-full w-full flex flex-col items-center justify-center p-8 relative"
           >
             <motion.div
               className="text-center mb-8 max-w-3xl"
@@ -56,13 +56,13 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="bg-green-500 text-black px-6 py-3 rounded text-lg font-semibold hover:bg-green-400 transition-colors"
+                className="bg-green-500 text-black px-6 py-3 rounded text-lg font-semibold hover:bg-green-400 transition-colors mb-20 sm:mb-8"
                 onClick={() => setCurrentStage('loading')}
               >
                 Enter
               </motion.button>
             )}
-            <div className="absolute bottom-8 flex gap-8">
+            <div className="absolute bottom-8 flex gap-4 sm:gap-8 flex-wrap justify-center w-full px-4">
               <Link href="https://t.me/example" className="text-green-500 hover:text-green-400 font-bold">TELEGRAM</Link>
               <Link href="https://twitter.com/example" className="text-green-500 hover:text-green-400 font-bold">TWITTER</Link>
               <Link href="https://dexscreener.com/example" className="text-green-500 hover:text-green-400 font-bold">DEXSCREENER</Link>
